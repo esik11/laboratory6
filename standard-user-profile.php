@@ -163,7 +163,7 @@ if (isset($_SESSION['id'])) {
                     <p>Address: <?php echo $user['address']; ?></p>
                     <p>Phone Number: <?php echo $user['phone']; ?></p>      
                     <p>Gender: <?php echo $user['gender']; ?></p>        
-                    <a href='users-edit.php?id=<?php echo $user_id; ?>' class='btn btn-success btn-sm'>EDIT PROFILE</a>
+                    <a href='user-edit.php?id=<?php echo $user_id; ?>' class='btn btn-success btn-sm'>EDIT PROFILE</a>
                     <a href='subjects.php?id=<?php echo $user_id; ?>' class='btn btn-success btn-sm'>SEE YOUR SUBJECTS HERE!</a>
                     <a href="logout.php" class="d-block">Logout</a>                
                 </div>

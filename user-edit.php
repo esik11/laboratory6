@@ -1,80 +1,61 @@
 <?php
-session_start();
-include('includes/header.php');
-include('includes/topbar.php');
 include('includes/db-conn.php');
-require_once 'config.php';
+// Start session to manage user data
+session_start();
 
-if (!isset($_SESSION['user_token']) || empty($_SESSION['user_token'])) {
-    echo "<div class='alert alert-danger'>Session token is not set or invalid.</div>";
+// Check if user is logged in using Facebook or standard login
+if (isset($_SESSION['id'])) {
+    // Retrieve user ID from session
+    $user_id = $_SESSION['id'];
+
+    // Query to fetch user data based on user ID
+    $query = "SELECT email, password, firstname , last_name, full_name, gender, phone, address FROM profile WHERE id = $user_id";
+
+    // Execute query
+    $result = mysqli_query($conn, $query);
+
+    // Check if query is successful and user data is found
+    if ($result && mysqli_num_rows($result) > 0) {
+        // Fetch user details
+        $user = mysqli_fetch_assoc($result);
+    } else {
+        // Handle error if no user found with the given user ID
+        // For instance, redirect the user to a login page or display an error message
+    }
+} else {
+    // Handle the case where the user is not logged in
+    // For instance, redirect the user to a login page
+    header("Location: login.php");
     exit();
 }
 
-// Check if the form is submitted for profile update
+// Handle form submission to update user profile
 if (isset($_POST['update_profile'])) {
-    // Validate and sanitize input data
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $firstname = filter_var($_POST['firstname'], FILTER_SANITIZE_STRING);
-    $lastname = filter_var($_POST['lastname'], FILTER_SANITIZE_STRING);
-    $phone = filter_var($_POST['phone'], FILTER_SANITIZE_STRING);
-    $gender = filter_var($_POST['gender'], FILTER_SANITIZE_STRING);
-    $address = filter_var($_POST['address'], FILTER_SANITIZE_STRING);
+    // Escape user input to prevent SQL injection
+    $firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
+    $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $phone = mysqli_real_escape_string($conn, $_POST['phone']);
+    $address = mysqli_real_escape_string($conn, $_POST['address']);
 
-    // Prepare and execute the update query
-    $query = "UPDATE profile SET email = ?, firstname = ?, last_name = ?, gender = ?, phone = ?, address = ? WHERE token = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("sssssss", $email, $firstname, $lastname, $gender, $phone, $address, $_SESSION['user_token']);
-    $stmt->execute();
+    // Update user profile in the database
+    $query = "UPDATE profile SET firstname = '$firstname', last_name = '$last_name', email = '$email', password = '$password', phone = '$phone', address = '$address' WHERE id = $user_id";
 
-    // Check for errors and changes
-    if ($stmt->errno) {
-        echo "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
+    // Execute query
+    $result = mysqli_query($conn, $query);
+
+    // Check if query is successful
+    if ($result) {
+        // Handle successful update
+        echo "Profile updated successfully!";
     } else {
-        // Check if the query was successful
-        if ($stmt->affected_rows > 0) {
-            echo "<div class='alert alert-success'>Profile updated successfully.</div>";
-            // Redirect to a different page after successful update
-            header("Location: index.php");
-            exit();
-        } else {
-            // No rows affected, no changes made
-            echo "<div class='alert alert-warning'>No changes detected or failed to update profile.</div>";
-        }
+        // Handle error
+        echo "Error updating profile: " . mysqli_error($conn);
     }
-
-    // Close the prepared statement
-    $stmt->close();
 }
-
-// Fetch user profile data from the database
-if (isset($_SESSION['user_token']) && !empty($_SESSION['user_token'])) {
-    // Prepare and execute the select query
-    $query = "SELECT * FROM profile WHERE token = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $_SESSION['user_token']);
-    $stmt->execute();
-
-    // Get the result
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $userinfo = $result->fetch_assoc();
-    } else {
-        echo "<div class='alert alert-danger'>User profile not found.</div>";
-    }
-
-    // Close the prepared statement
-    $stmt->close();
-}
-
-// Check if the database connection was successful
-if ($conn->connect_error) {
-    echo "<div class='alert alert-danger'>Error: " . $conn->connect_error . "</div>";
-}
-
-// Close the database connection
-$conn->close();
 ?>
+
 
 <div class="content-wrapper">
     <section class="content-header">
@@ -123,7 +104,7 @@ $conn->close();
                                 </div>
                                 <input type="submit" name="update_profile"
                                        class="btn btn-primary" value="Update">
-                                <a href="index.php" class="d-block">go back</a>
+                                <a href="standard-user-profile.php" class="d-block">go back</a>
                             </form>
                         </div>
                     </div>
