@@ -3,6 +3,7 @@ session_start();
 include ('includes/header.php');
 include ('includes/db-conn.php');
 include ('includes/topbar.php');
+
 ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -120,6 +121,8 @@ include ('includes/topbar.php');
                 <span class="description"><?php echo $_SESSION['fb_name']; ?></span>
             </div>
             <!-- /.user-block -->
+            <p>ID: <?php echo isset($_SESSION['id']) ? $_SESSION['id'] : 'Unknown'; ?></p>
+
                   <p>FB ID: <?php echo $_SESSION['fb_id'] ; ?></p>
       <p>FB EMAIL: <?php echo $_SESSION['fb_email']; ?></p>
       <p>FB NAME: <?php  echo $_SESSION['fb_name']; ?></p>    
@@ -127,6 +130,8 @@ include ('includes/topbar.php');
       <p>FB GENDER: <?php echo $_SESSION['gender']; ?></p>
       <p>FB ADDRESS: <?php  echo  $_SESSION['address']; ?></p>    
       <a href='fb-user-edit.php?fb_id=<?php echo $_SESSION['fb_id']; ?>' class='btn btn-success btn-sm'>Edit</a>
+      <a href='subjects.php?id=<?php echo isset($_SESSION['id']) ? $_SESSION['id'] : ''; ?>' class='btn btn-success btn-sm'>SEE YOUR SUBJECTS HERE!</a>
+
       <a href="logout.php" class="d-block">Logout</a>
                 </div>
               </div>

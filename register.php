@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $gender = validate($_POST['gender']);
 
     // Check if email already exists
-    $email_check_query = "SELECT * FROM profile WHERE email='$email' LIMIT 1";
+    $email_check_query = "SELECT * FROM user_profile1 WHERE email='$email' LIMIT 1";
     $result = mysqli_query($conn, $email_check_query);
     $user = mysqli_fetch_assoc($result);
 
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Insert user data into the database if no errors
     if (!isset($_SESSION['error'])) {
-        $sql = "INSERT INTO profile (email, password, firstname, last_name, full_name, gender, phone, address)
+        $sql = "INSERT INTO user_profile1 (email, password, firstname, last_name, full_name, gender, phone, address)
             VALUES ('$email', '$password', '$firstname', '$lastname', '$full_name', '$gender', '$phone_number' , '$address')";
 
         if (mysqli_query($conn, $sql)) {

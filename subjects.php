@@ -18,16 +18,31 @@
     // Function to fetch the logged-in user ID from the `profile` table
     function getLoggedInUserId() {
         if (isset($_SESSION['id'])) {
+            // Standard login
             return $_SESSION['id'];
+        } elseif (isset($_SESSION['fb_id'])) {
+            // Facebook login
+            global $conn;
+            $fb_id = $_SESSION['fb_id'];
+            $query = "SELECT id FROM user_profile1 WHERE fb_id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("s", $fb_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                return $row['id'];
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
     }
-
     // Function to fetch all subjects/courses from the database
     function getAllSubjects() {
         global $conn;
-        $sql = "SELECT * FROM subjects1 WHERE user_id = " . getLoggedInUserId();
+        $sql = "SELECT * FROM subjects2 WHERE user_id = " . getLoggedInUserId();
         $result = $conn->query($sql);
         $subjects = array();
         if ($result->num_rows > 0) {
@@ -45,7 +60,16 @@
         $description = mysqli_real_escape_string($conn, $description);
         $credits = intval($credits);
         $user_id = getLoggedInUserId();
-        $sql = "INSERT INTO subjects1 (name, description, credits, user_id) VALUES ('$name', '$description', $credits, $user_id)";
+    
+        // Check if the user_id exists in the user_profile1 table
+        $sql = "SELECT * FROM user_profile1 WHERE id = $user_id";
+        $result = $conn->query($sql);
+        if ($result->num_rows == 0) {
+            // User not found, do not insert into subjects2 table
+            return false;
+        }
+    
+        $sql = "INSERT INTO subjects2 (name, description, credits, user_id) VALUES ('$name', '$description', $credits, $user_id)";
         if ($conn->query($sql) === TRUE) {
             return true;
         } else {
@@ -134,6 +158,8 @@
 
     <!-- Link to go back to user profile -->
     <a href="standard-user-profile.php">Back to User Profile</a>
+    <br>
+    <a href="profile.php">Back to User Profile(IF YOU LOGGED IN WITH FACEBOOK ONLY)</a>
 
     </body>
     </html>

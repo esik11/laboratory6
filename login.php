@@ -22,27 +22,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if email or password is empty
     if (empty($email) || empty($password)) {
         // Redirect with error message if fields are empty
-        header("Location: login.php?error=All fields are required");
+        header("Location: index.php?error=All fields are required");
         exit();
     } else {
-        // Check if the user is not already logged in
-        if (!isset($_SESSION['id'])) {
-                                                                                               
-        $query = "SELECT * FROM profile WHERE email = '$email' AND password = '$password'"; // Query the database to retrieve user information based on email and password
-            $result = mysqli_query($conn, $query);
+        $query = "SELECT * FROM user_profile1 WHERE email = '$email' AND password = '$password'";
+        $result = mysqli_query($conn, $query);
 
-            // Check if exactly one user is found with the provided credentials
-            if (mysqli_num_rows($result) == 1) {
-                // if correct input values it will go and Set the session variable for user ID and redirect to index.php
-                $row = mysqli_fetch_assoc($result);
-                $_SESSION['id'] = $row['id'];
-                header("Location: landingpage.php");
-                exit();
-            } else {
-                // Redirect with error message for incorrect email or password
-                header("Location: login.php?error=Incorrect email or password");
-                exit();
-            }
+        if (mysqli_num_rows($result) == 1) {
+            $row = mysqli_fetch_assoc($result);
+            $_SESSION['id'] = $row['id']; // Set the session variable for user ID
+            header("Location: landingpage.php");
+            exit();
+        } else {
+            header("Location: login.php?error=Incorrect email or password");
+            exit();
         }
     }
 }
@@ -112,15 +105,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                         </div>
-                    </div>
-                </form>
-                <p class="mb-1">
-                    <a href="#">I forgot my password</a>
-                </p>
-                <p class="mb-0">
-                    <a href="register.php" class="text-center">Register a new membership</a>
-                </p>
-            </div>
+                        <div class="social-auth-links text-center mb-3">
+                            <p>- OR -</p>
+                            <a href="fb-login.php" class="btn btn-block btn-primary">
+                            <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
+                            </a>
+                            <a href="login-google.php" class="btn btn-block btn-danger">
+                            <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+                            </a>
+                        </div>
+                        <!-- /.social-auth-links -->
+
+                        <p class="mb-1">
+                            <a href="forgot-password.html">I forgot my password</a>
+                        </p>
+                        <p class="mb-0">
+                            <a href="register.php" class="text-center">Register a new membership</a>
+                        </p>
+                        </div>
             <!-- /.login-card-body -->
         </div>
     </div>

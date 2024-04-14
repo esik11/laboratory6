@@ -4,8 +4,8 @@ require_once 'vendor/autoload.php';
 include ('includes/db-conn.php');
 
 $fb = new Facebook\Facebook([
-    'app_id' => '', // your app id
-    'app_secret' => '', // your app secret
+    'app_id' => '384174217926140', // your app id
+    'app_secret' => '9297e9e71020a9ac5e51020385652ebb', // your app secret
     'default_graph_version' => 'v2.4',
 ]);
 
@@ -61,20 +61,39 @@ $_SESSION['fb_email'] = $fbemail;
 $_SESSION['gender'] = $fbgender;
 $_SESSION['phone'] = $fbphone;
 $_SESSION['address'] = $fbaddress;
+$user_id = $_SESSION['id']; // assuming you have a session variable called 'user_id'
 
         // Check if the user's data exists in the database
-        $query = "SELECT * FROM profile WHERE fb_id = '" . mysqli_real_escape_string($conn, $fbid) . "'";
-        $result = mysqli_query($conn, $query);
+        // Check if the user's data exists in the database
+$query = "SELECT * FROM user_profile1 WHERE fb_id = '" . mysqli_real_escape_string($conn, $fbid) . "'";
+$result = mysqli_query($conn, $query);
 
-        if (mysqli_num_rows($result) == 0) {
-            // If the user's data doesn't exist, insert it
-            $query = "INSERT INTO profile (fb_id, full_name, email, gender, phone, address) VALUES ('$fbid', '$fbfullname', '$fbemail', '$fbgender', '$fbphone', '$fbaddress')";
-            mysqli_query($conn, $query);
-        }
+if (mysqli_num_rows($result) == 0) {
+    // If the user's data doesn't exist, insert it
+    $query = "INSERT INTO user_profile1 (fb_id, full_name, email, gender, phone, address) VALUES ('$fbid', '$fbfullname', '$fbemail', '$fbgender', '$fbphone', '$fbaddress')";
+    mysqli_query($conn, $query);
+}
 
-        // Redirect to the profile page
-        header('Location: profile.php');
-        exit;
+// Get the user ID from the database
+$query = "SELECT id FROM user_profile1 WHERE fb_id = '" . mysqli_real_escape_string($conn, $fbid) . "'";
+$result = mysqli_query($conn, $query);
+if ($row = mysqli_fetch_assoc($result)) {
+    $user_id = $row['id'];
+    // Store user ID in session variable
+    $_SESSION['id'] = $user_id;
+}
+
+
+// Redirect to the profile page
+header('Location: profile.php');
+exit;
+
+
+// Redirect to the profile page
+header('Location: profile.php');
+exit;
+
+
     } catch(Facebook\Exceptions\FacebookResponseException $e) {
         // Graph API error occurred
         echo 'Graph returned an error: ' . $e->getMessage();
@@ -86,7 +105,7 @@ $_SESSION['address'] = $fbaddress;
     }
 } else {
     // Generate Facebook login URL
-    $loginUrl = $helper->getLoginUrl('http://localhost/laboratory5.php/laboratory5.php/laboratory5/fb-login.php', $permissions);
+    $loginUrl = $helper->getLoginUrl('http://localhost/laboratory6.php/laboratory6/fb-login.php', $permissions);
 ?>
     <!DOCTYPE html>
     <html>

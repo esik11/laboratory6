@@ -16,7 +16,7 @@ if (isset($_SESSION['id'])) {
     $user_id = $_SESSION['id'];
 
     // Query to fetch user data based on user ID
-    $query = "SELECT email, password, firstname , last_name, full_name, gender, phone, address FROM profile WHERE id = $user_id";
+    $query = "SELECT email, password, firstname , last_name, full_name, gender, phone, address FROM user_profile1 WHERE id = $user_id";
 
     // Execute query
     $result = mysqli_query($conn, $query);

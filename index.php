@@ -27,7 +27,7 @@ if (isset($_GET['code'])) {
   ];
 
   // checking if user is already exists in database
-  $sql = "SELECT * FROM profile WHERE email ='{$userinfo['email']}'";
+  $sql = "SELECT * FROM user_profile1 WHERE email ='{$userinfo['email']}'";
   $result = mysqli_query($conn, $sql);
   if (mysqli_num_rows($result) > 0) {
     // user is exists
@@ -35,7 +35,7 @@ if (isset($_GET['code'])) {
     $token = $userinfo['token'];
   } else {
     // user is not exists
-    $sql = "INSERT INTO profile (email, firstname, last_name, gender, full_name, picture, verifiedEmail, token) VALUES ('{$userinfo['email']}', '{$userinfo['firstname']}', '{$userinfo['last_name']}', '{$userinfo['gender']}', '{$userinfo['full_name']}', '{$userinfo['picture']}', '{$userinfo['verifiedEmail']}', '{$userinfo['token']}')";
+    $sql = "INSERT INTO user_profile1 (email, firstname, last_name, gender, full_name, picture, verifiedEmail, token) VALUES ('{$userinfo['email']}', '{$userinfo['firstname']}', '{$userinfo['last_name']}', '{$userinfo['gender']}', '{$userinfo['full_name']}', '{$userinfo['picture']}', '{$userinfo['verifiedEmail']}', '{$userinfo['token']}')";
     $result = mysqli_query($conn, $sql);
     if ($result) {
       $token = $userinfo['token'];
@@ -46,7 +46,7 @@ if (isset($_GET['code'])) {
 }
 
 // update verifiedEmail field in database
-$sql = "UPDATE profile SET verifiedEmail = '{$userinfo['verifiedEmail']}' WHERE token = '{$token}'";
+$sql = "UPDATE user_profile1 SET verifiedEmail = '{$userinfo['verifiedEmail']}' WHERE token = '{$token}'";
 $result = mysqli_query($conn, $sql);
 if (!$result) {
   echo "Failed to update verifiedEmail field in database";
@@ -62,7 +62,7 @@ if (!$result) {
   }
 
   // checking if user is already exists in database
-  $sql = "SELECT * FROM profile WHERE token ='{$_SESSION['user_token']}'";
+  $sql = "SELECT * FROM user_profile1 WHERE token ='{$_SESSION['user_token']}'";
   $result = mysqli_query($conn, $sql);
   if (mysqli_num_rows($result) > 0) {
     // user is exists
@@ -78,7 +78,7 @@ if (!$result) {
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Profile</h1>
+            <h1>USER</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">

@@ -30,7 +30,7 @@ $subject_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 // Delete the subject from the database
 if ($subject_id > 0) {
     $user_id = getLoggedInUserId();
-    $sql = "DELETE FROM subjects1 WHERE id = $subject_id AND user_id = $user_id";
+    $sql = "DELETE FROM subjects2 WHERE id = $subject_id AND user_id = $user_id";
     if ($conn->query($sql) === TRUE) {
         echo "<div>Subject deleted successfully.</div>";
     } else {

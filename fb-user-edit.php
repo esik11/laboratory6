@@ -22,7 +22,7 @@ if (isset($_POST['update_profile'])) {
     }
 
     // Prepare and execute the update query
-    $query = "UPDATE profile SET email = ?, firstname = ?, last_name = ?, gender = ?, phone = ?, address = ? WHERE fb_id = ?";
+    $query = "UPDATE user_profile1 SET email = ?, firstname = ?, last_name = ?, gender = ?, phone = ?, address = ? WHERE fb_id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("sssssss", $email, $firstname, $lastname, $gender, $phone, $address, $_SESSION['fb_id']);
     $success = $stmt->execute();
@@ -50,11 +50,11 @@ if (isset($_POST['update_profile'])) {
     $stmt->close();
 }
 
-// Fetch user profile data from the database
-// Fetch user profile data from the database
+// Fetch user user_profile1 data from the database
+// Fetch user user_profile1 data from the database
 if (isset($_SESSION['fb_id']) && !empty($_SESSION['fb_id'])) {
     // Check if the fb_id exists in the database
-    $query = "SELECT COUNT(*) as count FROM profile WHERE fb_id = ?";
+    $query = "SELECT COUNT(*) as count FROM user_profile1 WHERE fb_id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $_SESSION['fb_id']);
     $stmt->execute();
@@ -64,7 +64,7 @@ if (isset($_SESSION['fb_id']) && !empty($_SESSION['fb_id'])) {
 
     if ($count > 0) {
         // Prepare and execute the select query
-        $query = "SELECT * FROM profile WHERE fb_id = ?";
+        $query = "SELECT * FROM user_profile1 WHERE fb_id = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("s", $_SESSION['fb_id']);
         $stmt->execute();
