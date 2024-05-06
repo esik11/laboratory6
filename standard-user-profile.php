@@ -157,7 +157,6 @@ if (isset($_SESSION['id'])) {
                     </div>
                     <!-- /.user-block -->
                     <p>Email: <?php echo $user['email']; ?></p>
-                    <p>Password: <?php echo $user['password']; ?></p>
                     <p>First Name: <?php echo $user['firstname']; ?></p>
                     <p>Last Name: <?php echo $user['last_name']; ?></p>
                     <p>Address: <?php echo $user['address']; ?></p>

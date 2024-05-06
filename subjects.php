@@ -159,7 +159,6 @@
     <!-- Link to go back to user profile -->
     <a href="standard-user-profile.php">Back to User Profile</a>
     <br>
-    <a href="profile.php">Back to User Profile(IF YOU LOGGED IN WITH FACEBOOK ONLY)</a>
 
     </body>
     </html>

@@ -2,7 +2,6 @@
 session_start();
 include ('includes/header.php');
 include ('includes/db-conn.php');
-include ('includes/topbar.php');
 require_once 'config.php';
 
 // authenticate code from Google OAuth Flow
