@@ -4,8 +4,8 @@ require_once 'vendor/autoload.php';
 include ('includes/db-conn.php');
 
 $fb = new Facebook\Facebook([
-    'app_id' => '384174217926140', // your app id
-    'app_secret' => '9297e9e71020a9ac5e51020385652ebb', // your app secret
+    'app_id' => '', // your app id
+    'app_secret' => '', // your app secret
     'default_graph_version' => 'v2.4',
 ]);
 

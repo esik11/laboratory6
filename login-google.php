@@ -9,9 +9,9 @@ include 'includes/db-conn.php';     // Load database connection.
 
 // Initialize Google Client
 $client = new Google_Client();
-$client->setClientId('261596654543-g79jvsumotns0c0frjb14cjb3s29nllu.apps.googleusercontent.com'); // Your Google Client ID
-$client->setClientSecret('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'); // Your Google Client Secret
-$client->setRedirectUri('http://localhost/laboratory5.php/laboratory5.php/laboratory5/login-google.php'); // Redirect URI after login
+$client->setClientId(''); // Your Google Client ID
+$client->setClientSecret(''); // Your Google Client Secret
+$client->setRedirectUri(''); // Redirect URI after login
 $client->addScope('profile'); // Request access to user's profile information
 $client->addScope('email');   // Request access to user's email address
 
