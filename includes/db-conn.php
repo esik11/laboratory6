@@ -2,7 +2,7 @@
 $sname = 'localhost';
 $uname= 'root';
 $password = "";
-$db_name = "ipt101";
+$db_name = "lab6";
 
 $conn = mysqli_connect($sname, $uname, $password, $db_name);
 
