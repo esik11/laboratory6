@@ -10,6 +10,7 @@ if (!isset($_SESSION['student_id'])) {
     exit();
 }
 
+
 // Fetch logged-in user's information from the database
 $student_id = $_SESSION['student_id'];
 $sql_user = "SELECT department FROM students WHERE student_id = ?";
@@ -22,10 +23,20 @@ if ($result_user->num_rows == 1) {
     $user_row = $result_user->fetch_assoc();
     $user_department = $user_row['department'];
 
+    // Retrieve the department details
+    $sql_department = "SELECT * FROM departments WHERE dept_name = ?";
+    $stmt_department = $conn->prepare($sql_department);
+    $stmt_department->bind_param("s", $user_department);
+    $stmt_department->execute();
+    $result_department = $stmt_department->get_result();
+
+    $dept_row = $result_department->fetch_assoc();
+    $dept_row_id = $dept_row['dept_id'];
+
     // Retrieve subjects based on user's department
     $sql_subjects = "SELECT subject_id, subject_name, subject_code, credits FROM subjects WHERE department = ?";
     $stmt_subjects = $conn->prepare($sql_subjects);
-    $stmt_subjects->bind_param("s", $user_department);
+    $stmt_subjects->bind_param("s", $dept_row_id);
     $stmt_subjects->execute();
     $result_subjects = $stmt_subjects->get_result();
 
@@ -40,7 +51,6 @@ if ($result_user->num_rows == 1) {
         $stmt_check_enrollment->execute();
         $result_check_enrollment = $stmt_check_enrollment->get_result();
         
-
         if ($result_check_enrollment->num_rows == 0) {
             // Insert the subject into the student_subjects table
             $sql_insert = "INSERT INTO student_subjects (student_id, subject_id) VALUES (?, ?)";
@@ -247,12 +257,6 @@ if ($result_user->num_rows == 1) {
                 <label for="subject_id">Select Subject</label>
                 <select class="form-control" id="subject_id" name="subject_id" required>
                   <?php
-                  // Fetch all subjects (temporary)
-                  $sql_subjects = "SELECT subject_id, subject_name, subject_code FROM subjects";
-                  $stmt_subjects = $conn->prepare($sql_subjects);
-                  $stmt_subjects->execute();
-                  $result_subjects = $stmt_subjects->get_result();
-
                   while ($row = $result_subjects->fetch_assoc()) {
                     echo "<option value='" . $row['subject_id'] . "'>" . htmlspecialchars($row['subject_name']) . " (" . htmlspecialchars($row['subject_code']) . ")</option>";
                   }

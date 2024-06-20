@@ -142,6 +142,13 @@ $result = $conn->query($sql);
                     <p>Subjects</p>
                   </a>
               </ul>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="admins.php" class="nav-link">
+                    <i class="fas fa-book nav-icon"></i>
+                    <p>Admins</p>
+                  </a>
+              </ul>
               <br>
               <hr>
               <ul class="nav nav-treeview">
